@@ -1,100 +1,16 @@
-React პროექტის ინსტალაცია Vite ტექნოლოგიის გამოყენებით:
+# React + Vite
 
-1. npm create vite@latest
-2. ვირჩევთ Template: React => Javascript
-3. npm run dev
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-===============================================================
+Currently, two official plugins are available:
 
-Tailwind Css ინსტალაცია:
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-1. npm install tailwindcss @tailwindcss/vite
-2. @import "tailwindcss" index.css ფაილში;
-3. vite.config.js ფაილში პლაგინის დამატება:
-import { defineConfig } from 'vite'
-<!-- import tailwindcss from '@tailwindcss/vite' -->
+## React Compiler
 
-export default defineConfig({
-plugins: [
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-<!-- tailwindcss(), -->
+## Expanding the ESLint configuration
 
-],
-})
-
-===============================================================
-
-Shadcn/ui components ინსტალაცია და იმპორტი:
-
-1. jsconfig.json ფაილში კოდის ჩამატება:
-   {
-   "files": [],
-   "references": [],
-   <!-- "compilerOptions": {
-   "baseUrl": ".",
-   "paths": {
-   "@/_": ["./src/_"]
-   }
-   } -->
-   }
-2. npm install -D @types/node
-3. vite.config.js ფაილში კოდის ჩამატება:
-   import path from "path"
-   import tailwindcss from "@tailwindcss/vite"
-   import react from "@vitejs/plugin-react"
-   import { defineConfig } from "vite"
-
-// https://vite.dev/config/
-export default defineConfig({
-plugins: [react(), tailwindcss()],
-resolve: {
-alias: {
-"@": path.resolve(\_\_dirname, "./src"),
-},
-},
-})
-
-4. npx shadcn@latest init
-5. Which color would you like to use as base color? › Neutral
-6. button-ის დამატება:
-   npx shadcn@latest add button
-7. import { Button } from "@/components/ui/button";
-   import { Card } from "@/components/ui/card";
-
-===============================================================
-
-Swiper ინსტალაცია და იმპორტი:
-
-1. npm i swiper
-2. იმპორტი:
-   import { Swiper, SwiperSlide } from "swiper/react";
-   import { Autoplay, Pagination, Navigation, EffectFade } from "swiper/modules";
-   import "swiper/css";
-   import "swiper/css/pagination";
-   import "swiper/css/navigation";
-   import "swiper/css/effect-fade";
-
-===============================================================
-
-Anime.js ინსტალაცია და იმპორტი:
-
-1. npm install animejs
-2. <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script> index.html ფაილში
-
-===============================================================
-
-Icon იმპორტისთვის
-
-1. npm install lucide
-2. import {
-   Code,
-   Palette,
-   Search,
-   Smartphone,
-   Globe,
-   Database,
-   Award,
-   Users,
-   Target,
-   Zap,
-   } from "lucide-react";
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
