@@ -14,6 +14,8 @@ import {
   Users,
   Target,
   Zap,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import "swiper/css";
@@ -30,7 +32,6 @@ function Body() {
     {
       title: "თანამედროვე ტექნოლოგიები",
       description: "შექმენი შენი მომავალი React-ით",
-      // bgColor: "from-purple-600 to-blue-600",
       bgColor:
         "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white",
     },
@@ -112,6 +113,17 @@ function Body() {
       label: "მხარდაჭერა",
       color: "from-purple-500 to-pink-500",
     },
+  ];
+
+  const partnerCompanies = [
+    { name: "Company 1", logo: "C1", color: "from-blue-500 to-cyan-500" },
+    { name: "Company 2", logo: "C2", color: "from-purple-500 to-pink-500" },
+    { name: "Company 3", logo: "C3", color: "from-green-500 to-emerald-500" },
+    { name: "Company 4", logo: "C4", color: "from-orange-500 to-red-500" },
+    { name: "Company 5", logo: "C5", color: "from-indigo-500 to-blue-500" },
+    { name: "Company 6", logo: "C6", color: "from-teal-500 to-cyan-500" },
+    { name: "Company 7", logo: "C7", color: "from-yellow-500 to-orange-500" },
+    { name: "Company 8", logo: "C8", color: "from-rose-500 to-pink-500" },
   ];
 
   useEffect(() => {
@@ -212,6 +224,69 @@ function Body() {
         </div>
       )}
 
+      <style>{`
+        .hero-swiper .swiper-button-next,
+        .hero-swiper .swiper-button-prev {
+          width: 60px;
+          height: 60px;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          border-radius: 50%;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+        }
+
+        .hero-swiper .swiper-button-next:hover,
+        .hero-swiper .swiper-button-prev:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.4);
+          transform: scale(1.1);
+        }
+
+        .hero-swiper .swiper-button-next::after,
+        .hero-swiper .swiper-button-prev::after {
+          content: '';
+        }
+
+        .hero-swiper .swiper-pagination-bullet {
+          width: 12px;
+          height: 12px;
+          background: rgba(255, 255, 255, 0.5);
+          opacity: 1;
+          transition: all 0.3s ease;
+        }
+
+        .hero-swiper .swiper-pagination-bullet-active {
+          width: 40px;
+          border-radius: 6px;
+          background: white;
+        }
+
+        @keyframes scroll-left {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .partner-scroll-container {
+          display: flex;
+          width: 200%;
+          animation: scroll-left 30s linear infinite;
+        }
+
+        .partner-scroll-container:hover {
+          animation-play-state: paused;
+        }
+
+        .partner-item {
+          flex: 0 0 auto;
+          margin: 0 15px;
+        }
+      `}</style>
+
       {/* Hero Slider */}
       <section
         className={`h-screen transition-opacity duration-500 ${
@@ -223,16 +298,19 @@ function Body() {
           effect="fade"
           autoplay={{ delay: 2500, disableOnInteraction: false }}
           pagination={{ clickable: true }}
-          navigation={true}
+          navigation={{
+            nextEl: ".swiper-button-next-custom",
+            prevEl: ".swiper-button-prev-custom",
+          }}
           loop={true}
           speed={600}
           onSlideChange={handleSlideChange}
-          className="h-full w-full"
+          className="h-full w-full hero-swiper"
         >
           {slides.map((slide, index) => (
             <SwiperSlide key={index}>
               <div
-                className={`h-full w-full bg-gradient-to-br ${slide.bgColor} flex items-center justify-center`}
+                className={`h-full w-full bg-gradient-to-br ${slide.bgColor} flex items-center justify-center relative`}
               >
                 <div className="text-center px-4 max-w-4xl">
                   <h1 className="slide-title text-5xl md:text-7xl font-bold mb-6">
@@ -253,7 +331,65 @@ function Body() {
               </div>
             </SwiperSlide>
           ))}
+
+          <div className="swiper-button-prev-custom swiper-button-prev absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border-2 border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group">
+            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform" />
+          </div>
+          <div className="swiper-button-next-custom swiper-button-next absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border-2 border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group">
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform" />
+          </div>
         </Swiper>
+      </section>
+
+      {/* Partner Companies */}
+      <section
+        className="py-16 px-4 bg-slate-900 overflow-hidden"
+        id="partners"
+      >
+        <div className="max-w-full mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
+            პარტნიორი კომპანიები
+          </h2>
+
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div className="partner-scroll-container">
+                {partnerCompanies.map((company, index) => (
+                  <div key={`first-${index}`} className="partner-item">
+                    <div
+                      className={`w-48 h-32 bg-gradient-to-br ${company.color} rounded-xl shadow-2xl flex flex-col items-center justify-center transform hover:scale-110 transition-all duration-300 cursor-pointer border-2 border-white/10 hover:border-white/30`}
+                    >
+                      <div className="text-5xl font-black text-white mb-2 drop-shadow-lg">
+                        {company.logo}
+                      </div>
+                      <div className="text-sm font-semibold text-white/90">
+                        {company.name}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {partnerCompanies.map((company, index) => (
+                  <div key={`second-${index}`} className="partner-item">
+                    <div
+                      className={`w-48 h-32 bg-gradient-to-br ${company.color} rounded-xl shadow-2xl flex flex-col items-center justify-center transform hover:scale-110 transition-all duration-300 cursor-pointer border-2 border-white/10 hover:border-white/30`}
+                    >
+                      <div className="text-5xl font-black text-white mb-2 drop-shadow-lg">
+                        {company.logo}
+                      </div>
+                      <div className="text-sm font-semibold text-white/90">
+                        {company.name}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-900 to-transparent pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-900 to-transparent pointer-events-none"></div>
+          </div>
+        </div>
       </section>
 
       {/* Services */}

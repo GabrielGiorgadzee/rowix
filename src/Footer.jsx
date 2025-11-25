@@ -1,6 +1,6 @@
 import logo from "./assets/rowix-logo.png";
 
-function Footer() {
+export default function Footer() {
   return (
     <div>
       <footer className="py-16 px-4 bg-slate-900 border-t border-slate-700">
@@ -8,7 +8,6 @@ function Footer() {
           {/* Animated Line */}
           <div className="h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full mb-10 animate-line"></div>
 
-          {/* Centered Logo */}
           <div className="flex justify-center mb-6">
             <a href="https://rowix.com" target="_blank">
               <img
@@ -79,5 +78,3 @@ function Footer() {
     </div>
   );
 }
-
-export default Footer;
