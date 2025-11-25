@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation, EffectFade } from "swiper/modules";
+import { Autoplay, Pagination, Navigation, Parallax } from "swiper/modules";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -21,7 +21,6 @@ import {
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "swiper/css/effect-fade";
 
 function Body() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -136,81 +135,35 @@ function Body() {
 
   useEffect(() => {
     if (actionCards.length > 0) {
-      anime({
-        targets: ".action-card",
-        translateY: [80, 0],
-        opacity: [0, 1],
-        scale: [0.8, 1],
-        delay: anime.stagger(120),
-        easing: "easeOutExpo",
-        duration: 1200,
-      });
+      if (typeof anime !== "undefined") {
+        anime({
+          targets: ".action-card",
+          translateY: [80, 0],
+          opacity: [0, 1],
+          scale: [0.8, 1],
+          delay: anime.stagger(120),
+          easing: "easeOutExpo",
+          duration: 1200,
+        });
+      }
     }
   }, [actionCards]);
 
   useEffect(() => {
     if (isLoaded) {
-      anime({
-        targets: ".about-stat",
-        translateY: [60, 0],
-        opacity: [0, 1],
-        scale: [0.9, 1],
-        delay: anime.stagger(150, { start: 300 }),
-        easing: "easeOutExpo",
-        duration: 1000,
-      });
+      if (typeof anime !== "undefined") {
+        anime({
+          targets: ".about-stat",
+          translateY: [60, 0],
+          opacity: [0, 1],
+          scale: [0.9, 1],
+          delay: anime.stagger(150, { start: 300 }),
+          easing: "easeOutExpo",
+          duration: 1000,
+        });
+      }
     }
   }, [isLoaded]);
-
-  const scrollToSection = (sectionId) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      const targetPosition = section.offsetTop;
-
-      anime({
-        targets: window,
-        scrollTop: targetPosition,
-        duration: 1500,
-        easing: "easeInOutCubic",
-      });
-    }
-  };
-
-  useEffect(() => {
-    window.scrollToSection = scrollToSection;
-
-    return () => {
-      delete window.scrollToSection;
-    };
-  }, []);
-
-  useEffect(() => {
-    anime({
-      targets: ".slide-title",
-      translateX: [-100, 0],
-      opacity: [0, 1],
-      easing: "easeOutCubic",
-      duration: 800,
-    });
-
-    anime({
-      targets: ".slide-description",
-      translateX: [100, 0],
-      opacity: [0, 1],
-      easing: "easeOutCubic",
-      duration: 800,
-      delay: 200,
-    });
-
-    anime({
-      targets: ".slide-button",
-      scale: [0, 1],
-      opacity: [0, 1],
-      easing: "easeOutElastic(1, .6)",
-      duration: 1000,
-      delay: 400,
-    });
-  }, [currentSlide]);
 
   const handleSlideChange = (swiper) => {
     setCurrentSlide(swiper.realIndex);
@@ -225,6 +178,7 @@ function Body() {
       )}
 
       <style>{`
+        /* Hero Swiper Buttons */
         .hero-swiper .swiper-button-next,
         .hero-swiper .swiper-button-prev {
           width: 60px;
@@ -262,132 +216,133 @@ function Body() {
           background: white;
         }
 
-        @keyframes scroll-left {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-
-        .partner-scroll-container {
-          display: flex;
-          width: 200%;
-          animation: scroll-left 30s linear infinite;
-        }
-
-        .partner-scroll-container:hover {
-          animation-play-state: paused;
-        }
-
-        .partner-item {
-          flex: 0 0 auto;
-          margin: 0 15px;
+        /* Partner Swiper - Linear Animation Fix */
+        .partner-swiper .swiper-wrapper {
+          transition-timing-function: linear;
         }
       `}</style>
 
-      {/* Hero Slider */}
+      {/* Hero Slider - FIXED SCROLLING */}
       <section
         className={`h-screen transition-opacity duration-500 ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
         <Swiper
-          modules={[Autoplay, Pagination, Navigation, EffectFade]}
-          effect="fade"
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          modules={[Autoplay, Pagination, Navigation, Parallax]}
+          parallax={true}
+          speed={1000}
+          grabCursor={true}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           navigation={{
             nextEl: ".swiper-button-next-custom",
             prevEl: ".swiper-button-prev-custom",
           }}
           loop={true}
-          speed={600}
           onSlideChange={handleSlideChange}
           className="h-full w-full hero-swiper"
         >
           {slides.map((slide, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className="relative overflow-hidden">
+              {/* Background Layer with Parallax */}
               <div
-                className={`h-full w-full bg-gradient-to-br ${slide.bgColor} flex items-center justify-center relative`}
-              >
+                className={`absolute inset-0 w-[130%] h-full -left-[15%] ${slide.bgColor}`}
+                data-swiper-parallax="-23%"
+              ></div>
+
+              <div className="relative h-full w-full flex items-center justify-center z-10">
                 <div className="text-center px-4 max-w-4xl">
-                  <h1 className="slide-title text-5xl md:text-7xl font-bold mb-6">
+                  <h1
+                    className="slide-title text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg"
+                    data-swiper-parallax="-300"
+                  >
                     {slide.title}
                   </h1>
-                  <p className="slide-description text-xl md:text-3xl mb-8">
+                  <p
+                    className="slide-description text-xl md:text-3xl mb-8 drop-shadow-md"
+                    data-swiper-parallax="-200"
+                  >
                     {slide.description}
                   </p>
-                  <a href="https://rowix.com" target="_blank">
-                    <Button
-                      className="slide-button bg-white text-slate-900 hover:bg-slate-100 text-lg px-10 py-7"
-                      style={{ cursor: "pointer" }}
-                    >
-                      გაიგე მეტი
-                    </Button>
-                  </a>
+                  <div data-swiper-parallax="-100">
+                    <a href="https://rowix.com" target="_blank">
+                      <Button
+                        className="slide-button bg-white text-slate-900 hover:bg-slate-100 text-lg px-10 py-7 shadow-xl hover:shadow-2xl transition-all"
+                        style={{ cursor: "pointer" }}
+                      >
+                        გაიგე მეტი
+                      </Button>
+                    </a>
+                  </div>
                 </div>
               </div>
             </SwiperSlide>
           ))}
 
-          <div className="swiper-button-prev-custom swiper-button-prev absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border-2 border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group">
+          <div className="swiper-button-prev-custom swiper-button-prev absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border-2 border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group">
             <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform" />
           </div>
-          <div className="swiper-button-next-custom swiper-button-next absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border-2 border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group">
+          <div className="swiper-button-next-custom swiper-button-next absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border-2 border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer group">
             <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform" />
           </div>
         </Swiper>
       </section>
 
       {/* Partner Companies */}
-      <section
-        className="py-16 px-4 bg-slate-900 overflow-hidden"
-        id="partners"
-      >
-        <div className="max-w-full mx-auto">
+      <section className="py-16 bg-slate-950 overflow-hidden" id="partners">
+        <div className="max-w-full">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
             პარტნიორი კომპანიები
           </h2>
 
           <div className="relative">
-            <div className="overflow-hidden">
-              <div className="partner-scroll-container">
-                {partnerCompanies.map((company, index) => (
-                  <div key={`first-${index}`} className="partner-item">
-                    <div
-                      className={`w-48 h-32 bg-gradient-to-br ${company.color} rounded-xl shadow-2xl flex flex-col items-center justify-center transform hover:scale-110 transition-all duration-300 cursor-pointer border-2 border-white/10 hover:border-white/30`}
-                    >
-                      <div className="text-5xl font-black text-white mb-2 drop-shadow-lg">
-                        {company.logo}
-                      </div>
-                      <div className="text-sm font-semibold text-white/90">
-                        {company.name}
-                      </div>
+            {/* Swiper Infinity Ticker */}
+            <Swiper
+              modules={[Autoplay]}
+              spaceBetween={30}
+              slidesPerView={2}
+              loop={true}
+              speed={3000}
+              autoplay={{
+                delay: 0,
+                disableOnInteraction: false,
+              }}
+              allowTouchMove={true}
+              breakpoints={{
+                640: {
+                  slidesPerView: 3,
+                },
+                768: {
+                  slidesPerView: 4,
+                },
+                1024: {
+                  slidesPerView: 5,
+                },
+                1280: {
+                  slidesPerView: 6,
+                },
+              }}
+              className="partner-swiper py-4"
+            >
+              {partnerCompanies.map((company, index) => (
+                <SwiperSlide key={index} className="w-auto">
+                  <div
+                    className={`w-full h-32 bg-gradient-to-br ${company.color} rounded-xl shadow-lg flex flex-col items-center justify-center transform transition-all duration-300 border border-white/10 hover:border-white/30`}
+                  >
+                    <div className="text-4xl font-black text-white mb-2 drop-shadow-md">
+                      {company.logo}
+                    </div>
+                    <div className="text-xs font-semibold text-white/90">
+                      {company.name}
                     </div>
                   </div>
-                ))}
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-                {partnerCompanies.map((company, index) => (
-                  <div key={`second-${index}`} className="partner-item">
-                    <div
-                      className={`w-48 h-32 bg-gradient-to-br ${company.color} rounded-xl shadow-2xl flex flex-col items-center justify-center transform hover:scale-110 transition-all duration-300 cursor-pointer border-2 border-white/10 hover:border-white/30`}
-                    >
-                      <div className="text-5xl font-black text-white mb-2 drop-shadow-lg">
-                        {company.logo}
-                      </div>
-                      <div className="text-sm font-semibold text-white/90">
-                        {company.name}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-900 to-transparent pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-900 to-transparent pointer-events-none"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
           </div>
         </div>
       </section>
