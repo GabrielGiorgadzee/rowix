@@ -26,7 +26,6 @@ export default function Header() {
   return (
     <Disclosure
       as="nav"
-      // CHANGE HERE: Replaced 'relative' with 'sticky top-0 z-50'
       className="sticky top-0 z-50 bg-black after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
     >
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -82,7 +81,6 @@ export default function Header() {
               <BellIcon aria-hidden="true" className="size-6" />
             </button>
 
-            {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">
               <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                 <span className="absolute -inset-1.5" />
