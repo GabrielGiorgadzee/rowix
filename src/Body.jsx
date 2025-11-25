@@ -222,7 +222,7 @@ function Body() {
         }
       `}</style>
 
-      {/* Hero Slider - FIXED SCROLLING */}
+      {/* Hero Slider */}
       <section
         className={`h-screen transition-opacity duration-500 ${
           isLoaded ? "opacity-100" : "opacity-0"
@@ -245,7 +245,6 @@ function Body() {
         >
           {slides.map((slide, index) => (
             <SwiperSlide key={index} className="relative overflow-hidden">
-              {/* Background Layer with Parallax */}
               <div
                 className={`absolute inset-0 w-[130%] h-full -left-[15%] ${slide.bgColor}`}
                 data-swiper-parallax="-23%"
@@ -297,7 +296,6 @@ function Body() {
           </h2>
 
           <div className="relative">
-            {/* Swiper Infinity Ticker */}
             <Swiper
               modules={[Autoplay]}
               spaceBetween={30}
